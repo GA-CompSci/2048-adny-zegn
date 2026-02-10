@@ -40,32 +40,37 @@ public class Game {
     }
     
     /**
-     * TODO #1: Implement the method to add a random tile to the board
      * Requirements:
      * - 90% chance of adding a 2
      * - 10% chance of adding a 4
      * - Should only add to empty cells
      * - Use the getEmptyCells() method to find empty positions
-     * 
-     * Hint: Use random.nextInt(10) < 9 for 90% probability
      */
     private void addRandomTile() {
-        // TODO: Complete this method
-        
+        // Check if there are any empty cells
+        ArrayList<int[]> emptyCells = getEmptyCells();
+        if (emptyCells.isEmpty()) return;
+
+        // Pick a random cell
+        int[] cell = emptyCells.get((int)(Math.random() * emptyCells.size()));
+
+        // Randomly assign 
+        if (Math.random() < 0.9) board[cell[0]][cell[1]] = 2;
+        else board[cell[0]][cell[1]] = 4;
     }
     
     /**
-     * TODO #2: Implement the method to get all empty cells on the board
      * Requirements:
      * - Return an ArrayList of int arrays [row, col] for each empty cell
      * - A cell is empty if its value is 0
-     * 
-     * Hint: Loop through the board and check each cell
      */
     private ArrayList<int[]> getEmptyCells() {
-        // TODO: Complete this method
         ArrayList<int[]> emptyCells = new ArrayList<>();
-        
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if (board[row][col] == 0) emptyCells.add(new int[] {row, col});
+            }
+        }
         return emptyCells;
     }
     
@@ -87,7 +92,27 @@ public class Game {
      * 2. If any row changed, add a random tile
      */
     public boolean moveLeft() {
-        // TODO: Complete this method
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            int[] temp = new int[BOARD_SIZE];
+            int tempIndex = 0;
+            // Consolidate all numbers towards the left
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                
+                if (board[row][col] != 0) {
+                    temp[tempIndex] = board[row][col];
+                    tempIndex++;
+                }
+            }
+            // Merge all doubles - this will create new zeroes
+            for (int i = 0; i < BOARD_SIZE - 1; i++) {
+                if (temp[i] == temp[i - 1])  {
+                    score += 2 * temp[i];
+                    temp[i] *= 2;
+                    temp[i + 1] = 0;
+                }
+            }
+            // Consolidate while moving everything to the board
+        }
         boolean moved = false;
         
         return moved;
