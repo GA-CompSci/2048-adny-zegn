@@ -75,7 +75,6 @@ public class Game {
     }
     
     /**
-     * TODO #3: Implement the moveLeft method
      * Requirements:
      * - Slide all tiles to the left (remove gaps)
      * - Merge adjacent tiles with same value
@@ -92,34 +91,47 @@ public class Game {
      * 2. If any row changed, add a random tile
      */
     public boolean moveLeft() {
+        boolean moved = false;
         for (int row = 0; row < BOARD_SIZE; row++) {
             int[] temp = new int[BOARD_SIZE];
-            int tempIndex = 0;
+            int skipIterator = 0;
             // Consolidate all numbers towards the left
             for (int col = 0; col < BOARD_SIZE; col++) {
-                
                 if (board[row][col] != 0) {
-                    temp[tempIndex] = board[row][col];
-                    tempIndex++;
+                    temp[skipIterator] = board[row][col];
+                    skipIterator++;
                 }
             }
+            skipIterator = 0; // We will reuse this later
             // Merge all doubles - this will create new zeroes
             for (int i = 0; i < BOARD_SIZE - 1; i++) {
-                if (temp[i] == temp[i - 1])  {
+                if (temp[i] == temp[i + 1])  {
                     score += 2 * temp[i];
                     temp[i] *= 2;
                     temp[i + 1] = 0;
                 }
             }
+            // Check if the board has changed at this point
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if (temp[col] == board[row][col]) continue;
+                moved = true;
+            }
+            // Clear board
+            board[row] = new int[BOARD_SIZE];
             // Consolidate while moving everything to the board
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                if (temp[i] != 0) {
+                    board[row][skipIterator] = temp[i];
+                    skipIterator++;
+                }
+            }
         }
-        boolean moved = false;
-        
+        if (moved) addRandomTile();
+
         return moved;
     }
     
     /**
-     * TODO #4: Implement the moveRight method
      * Requirements:
      * - Similar to moveLeft but in opposite direction
      * - Slide tiles to the right
@@ -128,14 +140,47 @@ public class Game {
      * Hint: Process from right to left instead of left to right
      */
     public boolean moveRight() {
-        // TODO: Complete this method
         boolean moved = false;
-        
+        for (int row = 0; row < BOARD_SIZE; row++) {
+            int[] temp = new int[BOARD_SIZE];
+            int skipIterator = BOARD_SIZE - 1;
+            // Consolidate all numbers towards the right
+            for (int col = BOARD_SIZE - 1; col >= 0 ; col--) {
+                if (board[row][col] != 0) {
+                    temp[skipIterator] = board[row][col];
+                    skipIterator--;
+                }
+            }
+            skipIterator = BOARD_SIZE - 1; // We will reuse this later
+            // Merge all doubles - this will create new zeroes
+            for (int i = BOARD_SIZE - 1; i > 0; i--) {
+                if (temp[i] == temp[i - 1])  {
+                    score += 2 * temp[i];
+                    temp[i] *= 2;
+                    temp[i - 1] = 0;
+                }
+            }
+            // Check if the board has changed at this point
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if (temp[col] == board[row][col]) continue;
+                moved = true;
+            }
+            // Clear board
+            board[row] = new int[BOARD_SIZE];
+            // Consolidate while moving everything to the board
+            for (int i = BOARD_SIZE - 1; i >= 0; i--) {
+                if (temp[i] != 0) {
+                    board[row][skipIterator] = temp[i];
+                    skipIterator--;
+                }
+            }
+        }
+        if (moved) addRandomTile();
+
         return moved;
     }
     
     /**
-     * TODO #5: Implement the moveUp method
      * Requirements:
      * - Similar logic to moveLeft but operates on columns
      * - Slide tiles up
@@ -144,28 +189,98 @@ public class Game {
      * Hint: Work with columns instead of rows
      */
     public boolean moveUp() {
-        // TODO: Complete this method
         boolean moved = false;
-        
+        for (int col = 0; col < BOARD_SIZE; col++) {
+            int[] temp = new int[BOARD_SIZE];
+            int skipIterator = 0;
+            // Consolidate all numbers towards the left
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                if (board[row][col] != 0) {
+                    temp[skipIterator] = board[row][col];
+                    skipIterator++;
+                }
+            }
+            skipIterator = 0; // We will reuse this later
+            // Merge all doubles - this will create new zeroes
+            for (int i = 0; i < BOARD_SIZE - 1; i++) {
+                if (temp[i] == temp[i + 1])  {
+                    score += 2 * temp[i];
+                    temp[i] *= 2;
+                    temp[i + 1] = 0;
+                }
+            }
+            // Check if the board has changed at this point
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                if (temp[row] == board[row][col]) continue;
+                moved = true;
+            }
+            // Clear board
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                board[row][col] = 0;
+            }
+            // Consolidate while moving everything to the board
+            for (int i = 0; i < BOARD_SIZE; i++) {
+                if (temp[i] != 0) {
+                    board[skipIterator][col] = temp[i];
+                    skipIterator++;
+                }
+            }
+        }
+        if (moved) addRandomTile();
+
         return moved;
     }
     
     /**
-     * TODO #6: Implement the moveDown method
      * Requirements:
      * - Similar to moveUp but in opposite direction
      * - Slide tiles down
      * - Merge from bottom to top
      */
     public boolean moveDown() {
-        // TODO: Complete this method
         boolean moved = false;
-        
+        for (int col = 0; col < BOARD_SIZE; col++) {
+            int[] temp = new int[BOARD_SIZE];
+            int skipIterator = BOARD_SIZE - 1;
+            // Consolidate all numbers towards the right
+            for (int row = BOARD_SIZE - 1; row >= 0 ; row--) {
+                if (board[row][col] != 0) {
+                    temp[skipIterator] = board[row][col];
+                    skipIterator--;
+                }
+            }
+            skipIterator = BOARD_SIZE - 1; // We will reuse this later
+            // Merge all doubles - this will create new zeroes
+            for (int i = BOARD_SIZE - 1; i > 0; i--) {
+                if (temp[i] == temp[i - 1])  {
+                    score += 2 * temp[i];
+                    temp[i] *= 2;
+                    temp[i - 1] = 0;
+                }
+            }
+            // Check if the board has changed at this point
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                if (temp[row] == board[row][col]) continue;
+                moved = true;
+            }
+            // Clear board
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                board[row][col] = 0;
+            }
+            // Consolidate while moving everything to the board
+            for (int i = BOARD_SIZE - 1; i >= 0; i--) {
+                if (temp[i] != 0) {
+                    board[skipIterator][col] = temp[i];
+                    skipIterator--;
+                }
+            }
+        }
+        if (moved) addRandomTile();
+
         return moved;
     }
     
     /**
-     * TODO #7: Implement method to check if the player has won
      * Requirements:
      * - Return true if any tile has value >= WIN_VALUE (2048)
      * - Once won, should continue returning true (use hasWon field)
@@ -173,13 +288,15 @@ public class Game {
      * Hint: Check all tiles and update the hasWon field
      */
     public boolean hasWon() {
-        // TODO: Complete this method
-        
-        return false;
+        for (int[] row : board) {
+            for (int tile : row) {
+                if (tile >= WIN_VALUE) hasWon = true;
+            }
+        }
+        return hasWon;
     }
     
     /**
-     * TODO #8: Implement method to check if game is over
      * Requirements:
      * - Game is over when:
      *   1. No empty cells remain AND
@@ -189,9 +306,13 @@ public class Game {
      * Hint: First check for empty cells, then check all adjacent pairs
      */
     public boolean isGameOver() {
-        // TODO: Complete this method
-        
-        return false;
+        if (getEmptyCells().size() > 0) return false;
+        for (int row = 0; row < BOARD_SIZE - 1; row++) {
+            for (int col = 0; col < BOARD_SIZE - 1; col++) {
+                if (board[row][col] == board[row + 1][col] || board[row][col] == board[row][col + 1]) return false;
+            }
+        }
+        return true;
     }
     
     // ===================== PROVIDED METHODS - DO NOT MODIFY =====================
