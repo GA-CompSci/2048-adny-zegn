@@ -56,6 +56,8 @@ public class GUI extends JFrame {
     private JLabel statusLabel;
     private Game game;
     private JPanel gamePanel;
+
+    private boolean wonDisplayed = false;
     
     public GUI() {
         setTitle("2048 Game");
@@ -220,7 +222,8 @@ public class GUI extends JFrame {
     }
     
     private void checkGameStatus() {
-        if (game.hasWon()) {
+        if (game.hasWon() && !wonDisplayed) {
+            wonDisplayed = true;
             statusLabel.setText("Congratulations! You won!");
             statusLabel.setForeground(WIN_COLOR);
             JOptionPane.showMessageDialog(this, 
