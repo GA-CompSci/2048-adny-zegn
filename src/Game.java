@@ -308,11 +308,13 @@ public class Game {
     public boolean isGameOver() {
         gameOver = true;
         if (getEmptyCells().size() > 0) gameOver = false;
+        // Check if any horizontal adjacencies exist
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE - 1; col++) {
                 if (board[row][col] == board[row][col + 1]) gameOver = false;
             }
         }
+        // Check if any vertical adjacencies exist
         for (int row = 0; row < BOARD_SIZE - 1; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 if (board[row][col] == board[row + 1][col]) gameOver = false;
