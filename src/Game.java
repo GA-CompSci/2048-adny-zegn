@@ -1,11 +1,10 @@
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Game class for 2048
  * Contains all game logic and state management
  * 
- * STUDENT VERSION: Complete the TODO sections to make the game work!
+ * STUDENT VERSION: Complete the
  */
 public class Game {
     private static final int BOARD_SIZE = 4;
@@ -13,7 +12,6 @@ public class Game {
     
     private int[][] board;
     private int score;
-    private Random random;
     private boolean hasWon;
     private boolean gameOver;
     
@@ -21,7 +19,6 @@ public class Game {
      * Constructor - initializes a new game
      */
     public Game() {
-        random = new Random();
         resetGame();
     }
     
@@ -38,7 +35,7 @@ public class Game {
         addRandomTile();
         addRandomTile();
     }
-    
+
     /**
      * Requirements:
      * - 90% chance of adding a 2
